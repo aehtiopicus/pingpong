@@ -11,12 +11,13 @@
                     <img src="images/midas.png">
                 </a>
             </div>
+            <div ng-controller="LoginController" style="display:inline;">  
             <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav"  ng-show="userLoggedIn" ng-if="_loginChecker">
                     <li><a ui-sref="app">
                         <span class="glyphicon glyphicon-home"
                          aria-hidden="true"></span> Home</a></li>
-                    <li><a ui-sref="app.aboutus">
+                    <li ng-show="showParticipante"><a ui-sref="app.aboutus">
                         <span class="glyphicon glyphicon-user"
                          aria-hidden="true"></span> Participantes</a></li>
                     <li><a ui-sref="app.menu">
@@ -26,12 +27,20 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-center">
                 </ul>                
-                <ul class="nav navbar-nav navbar-right login" ng-controller="LoginController">
+                <ul class="nav navbar-nav navbar-right login" ng-show="userLoggedIn" ng-if="_loginChecker">
+                     <li>                        
+                        <button class="btn btn-info" ng-click="logout()">
+                            <i class="fa fa-user fa-lg" aria-hidden="true"></i>
+                            Cerrar Sesi&oacute;n
+                        </button>
+                    </li>
+                </ul>              
+                <ul class="nav navbar-nav navbar-right login" ng-show="!userLoggedIn" ng-if="_loginChecker">
                     <li>
-                        <input type="text" class="form-control" placeholder="usuario" aria-describedby="basic-addon1" ng-model="loginData.userName">
+                        <input type="text" class="form-control" placeholder="usuario" aria-describedby="basic-addon1" ng-model="loginData.userName" ng-class="{error:loginFailure}">
                     </li>
                     <li>
-                        <input type="password" class="form-control" placeholder="password" aria-describedby="basic-addon1" ng-model="loginData.password">
+                        <input type="password" class="form-control" placeholder="password" aria-describedby="basic-addon1" ng-model="loginData.password" ng-class="{error:loginFailure}">
                     </li>
                     <li>
                         <button class="btn btn-primary" ng-click="doLogin()">

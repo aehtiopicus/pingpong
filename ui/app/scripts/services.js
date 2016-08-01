@@ -1,3 +1,4 @@
+/*global angular, _ */
 'use strict';
 
 angular.module('pingpongapp')
@@ -55,12 +56,12 @@ angular.module('pingpongapp')
                     getOne : {
                         method : 'GET',
                         isArray : false,
-                        url : baseUrl + '/:id'
+                        url : baseUrl + 'miembros/:id'
                     },
                     update : {
                         method : 'PUT',
                         isArray : false,
-                        url : baseUrl + '/:id'
+                        url : baseUrl + 'miembros/:id'
                     },
                     create : {
                         method : 'POST',
@@ -77,11 +78,107 @@ angular.module('pingpongapp')
                                 return result;
                             }
                         }*/
+                    },
+
+                    remove : {
+                        method : 'DELETE',
+                        url : baseUrl +"miembros/:id"
                     }
 
 
                 });
                         
         }])
+      .service('localStorageService',[function() {
+            var _keys = {loginInfo : 'logInfo'};
+            var lsObject = {
+                date : null,
+                value : null
+            };
+            var lsRemove = function(key){
+                localStorage.removeItem(key);
+            };
+            var lsDateChecker = function(lsObject){
+                var date = new Date();
+                if(date.getTime()- new Date(lsObject.date).getTime() > (15*60*1000)){
+                    //invalid object
+                    return false;
+                }
+                return true;
+            };       
+            this.saveInLocalStorage = function(key,data){
+                lsObject.date = new Date();
+                lsObject.value = data;
+                localStorage.setItem(key,JSON.stringify(lsObject));
+            };
+
+            this.retrieveFromLocalStorage = function(key){
+                var result = localStorage.getItem(key);
+                if(!_.isNull(result)){
+                    var _result = JSON.parse(result);
+                    if(lsDateChecker(_result)){
+                        return _result.value;
+                    }else{
+                        lsRemove(key);
+                    }                    
+                }
+                return null;                
+            };
+
+            this.availableKeys = function(){
+                return Object.keys(_keys);
+            };
+
+            this.retrieveKey = function(key){
+                return _keys[key];
+            };
+            this.removeFromLocalStorage = function(key){
+                lsRemove(key);
+            };
+           
+      }])
+    .factory('ControllerCommunicationFactory',['$rootScope',function($rootScope){        
+        return { 
+            emitMsg : function(element,args){
+                $rootScope.$emit(element,args);
+            },
+            onMsg : function(msg,scope,func){
+                var unbind = $rootScope.$on(msg,func);
+                scope.$on('$destroy', unbind);
+            },
+            loginCompleted : 'loginCompleted',
+            logoutCompleted : 'logoutCompleted',
+            unsubscribe : 'unsubscribe'            
+
+        };
+
+    }])
+
+    .factory('MatchInformationFactory',['$resource','baseUrl',function($resource,baseUrl){        
+        return $resource(baseUrl+'matches',null,
+                {
+                    list : {
+                        method : 'GET',
+                        isArray : true
+                    },
+                    getOne : {
+                        method : 'GET',
+                        isArray : false,
+                        url : baseUrl + '/:id'
+                    },
+                    update : {
+                        method : 'PUT',
+                        isArray : false,
+                        url : baseUrl + '/:id'
+                    },
+                    create : {
+                        method : 'POST',
+                        isArray : false                       
+                    }
+
+
+                });
+
+    }])
 
 ;

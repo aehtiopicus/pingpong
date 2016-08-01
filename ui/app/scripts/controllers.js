@@ -1,3 +1,4 @@
+/*global angular, _ */
 'use strict';
 
 angular.module('pingpongapp')
@@ -113,44 +114,46 @@ angular.module('pingpongapp')
             };
         }])
 
-        .controller('IndexController',['$scope','menuFactory','corporateFactory',function($scope,menuFactory,corporateFactory){
+        .controller('IndexController',['$scope','localStorageService','ControllerCommunicationFactory',function($scope,localStorageService,ControllerCommunicationFactory){            
+            ControllerCommunicationFactory.onMsg(ControllerCommunicationFactory.loginCompleted,$scope,function(emitScope,miembro){
+                $scope.loadUser(miembro);
+            });
 
-            $scope.showDish = false;
-            $scope.message = 'Loading ...';
-            $scope.dish = menuFactory.getDishes().get({id:0}).$promise.then(
-                function (response){
-                    $scope.dish = response;
-                    $scope.showDish = true;
+            ControllerCommunicationFactory.onMsg(ControllerCommunicationFactory.logoutCompleted,$scope,function(emitScope,msg){
+                console.log(msg);
+                $scope.loadUser();
+            });
 
-                },
-                function (response){
-                     $scope.message = 'Error: '+response.status + ' '+response.statusText;
+            var _userLoggedKey = localStorageService.retrieveKey(localStorageService.availableKeys()[0]);
+
+            $scope.loadUser = function(miembro){                
+                if(!_.isNull(miembro) && !_.isUndefined(miembro)){
+                    $scope._miembro = miembro;
+                    $scope.loginRequired = true;
+                }else{
+                    $scope.loginRequired = false;
+                    $scope._miembro = {};
                 }
-            );
+            };
 
-            $scope.showPromotion = false;
-            $scope.promotionMessage = 'Loading ...';
-            menuFactory.getPromotion().get({id:0}).$promise.then(
-                function(response){
-                    $scope.promotion = response;
-                    $scope.showPromotion = true;
-                },
-                function(response){
-                   $scope.promotionMessage = 'Error: '+response.status + ' '+response.statusText;
+            (function(){
+                $scope.loadUser(localStorageService.retrieveFromLocalStorage(_userLoggedKey));
+            })();
+                       
+            
+        }])
 
+        .controller('GlobalController',['$scope','ControllerCommunicationFactory',function($scope,ControllerCommunicationFactory){            
+            ControllerCommunicationFactory.onMsg(ControllerCommunicationFactory.loginCompleted,$scope,function(emitScope,miembro){
+                if(!_.isUndefined($scope.loadUser)){
+                    $scope.loadUser(miembro);
                 }
-            );
-            $scope.showEmployee = false;
-            $scope.employeeMessage = 'Loading ...';
-            corporateFactory.getLeader().get({id:3}).$promise.then(
-                function (response){
-                    $scope.employee = response;
-                    $scope.showEmployee = true;
-                },
-                function (response){
-                    $scope.employeeMessage = 'Error: '+response.status + ' '+response.statusText;
-                }
-            );
+            });
+
+            $scope.unsubscribe = function(miembro){
+                ControllerCommunicationFactory.emitMsg(ControllerCommunicationFactory.unsubscribe,miembro);
+            };
+            
         }])
 
         .controller('AboutController',['$scope','corporateFactory',function($scope,corporateFactory){

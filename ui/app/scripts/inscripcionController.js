@@ -1,10 +1,22 @@
 'use strict';
 
 angular.module('pingpongapp').
-	controller('InscripcionController',['$scope','$uibModal','$log',function($scope,$uibModal,$log){
+	controller('InscripcionController',['$scope','$uibModal','$log','ControllerCommunicationFactory','miembroFactory',function($scope,$uibModal,$log,ControllerCommunicationFactory,miembroFactory){
 
   $scope.animationsEnabled = true;
 
+  ControllerCommunicationFactory.onMsg(ControllerCommunicationFactory.unsubscribe,$scope,function(emitScope,miembro){
+    miembro.deleted = true;
+        miembroFactory.update({id:miembro.id},miembro).$promise.then(
+          function(success){
+            console.log(success);
+            $scope.logout();
+          },
+          function(failure){
+            console.log(failure);
+          }
+        );
+  });
     
 
   $scope.newMiembro = function(){
@@ -33,7 +45,7 @@ angular.module('pingpongapp').
     });
 
     modalInstance.result.then(function (selectedItem) {      
-    	console.log(selectedItem);
+    	$scope.loginCompleted(selectedItem);
   		$scope.newMiembro();
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
@@ -60,6 +72,7 @@ angular.module('pingpongapp').
       	function(responseOk){
       		console.log(responseOk);
       		$scope.showError = false;
+          $scope.selected.miembro.id = responseOk.id;
       		$uibModalInstance.close($scope.selected.miembro);
       	},
       	function(responseError){
