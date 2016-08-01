@@ -1,0 +1,4 @@
+<p>Markup default</p>
+<div ng-controller="MarkupDefaultController" ng-cloak>
+    <div data-crud-table columns="columns" crudoperations="crudOperations" order="columns[0]"></div>
+</div>

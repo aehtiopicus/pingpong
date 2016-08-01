@@ -1,0 +1,16 @@
+bowercopy:
+  dist:
+    files:
+      'js/datetimepicker/datetimepicker.js': 'angular-bootstrap-datetimepicker/src/js/datetimepicker.js'
+      'styles/datetimepicker/datetimepicker.css': 'angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
+      'js/moment/moment-with-locales.js': 'moment/min/moment-with-locales.min.js'
+      'js/moment/locales.js': 'moment/min/locales.min.js'
+      
+  tmp-web: 
+    files:
+      'js/datetimepicker/datetimepicker.js': 'angular-bootstrap-datetimepicker/src/js/datetimepicker.js'
+      'styles/datetimepicker/datetimepicker.css': 'angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
+      'js/moment/moment-with-locales.js': 'moment/min/moment-with-locales.js'
+      'js/moment/locales.js': 'moment/min/locales.js'
+      'js/angular.js': 'angular/angular.js'
+      'js/pagination/dirPagination.js': 'angular-utils-pagination/dirPagination.js'

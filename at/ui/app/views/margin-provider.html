@@ -1,0 +1,99 @@
+<style type="text/css">
+	input[type="number"]{
+		font-size: 14px !important;
+		text-align: center;
+		width: 70px !important;
+		height: 30px !important;
+	}
+	span.error{
+		display:block;
+		color:red;
+	}
+</style>
+
+<div id="hoteles-admin-ui">
+	<form name="marginProviderForm">
+		<div ng-cloak>
+			<div class="header">
+			    <h1>{{name}}</h1>
+			</div>
+		    <alert ng-if="alert"
+		    	type="{{alert.type}}"
+		    	close="closeAlert()">{{alert.msg}}</alert>
+	    	<table border="1" ng-class="center" width="80%" align="center" >
+				<tr>
+					<th ng-repeat="columnTitle in columnTitles" class="text-center" bgcolor="lightgray">
+						{{columnTitle}}
+					</th>
+				</tr>
+				<tr ng-repeat="marginProvider in marginProviders" style="heigth: 30px">
+					<td class="text-center" width="5%">{{marginProvider.providerName}}</td>
+					<td class="text-center" width="15%">
+						<p ng-if="editingRowNumber != $index">{{marginProvider.marginApplied}}%</p>
+						<input type="number" name="marginApplied" ng-model="editValues.marginApplied" ng-if="editingRowNumber == $index" step="0.01" min="0" max="100" required>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& marginProviderForm.marginApplied.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& !marginProviderForm.marginApplied.$error.required
+						&& !marginProviderForm.marginApplied.$valid">Ingresar valor numerico entre 0 y 100</span>
+					</td>
+					<td class="text-center" width="15%">
+						<p ng-if="editingRowNumber != $index">{{marginProvider.rateMarkup}}%</p>
+						<input type="number" name="rateMarkup"  ng-model="editValues.rateMarkup" ng-if="editingRowNumber == $index" step="0.01" min="0" max="100" ng-change="calculeTaxMarkup()" required>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& marginProviderForm.rateMarkup.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& !marginProviderForm.rateMarkup.$error.required
+						&& !marginProviderForm.rateMarkup.$valid">Ingresar valor numerico entre 0 y 100</span>
+					</td>
+					<td class="text-center" width="15%">
+						<p ng-if="editingRowNumber != $index">{{marginProvider.taxMarkup}}%</p>
+						<input type="number" name="taxMarkup"  ng-model="editValues.taxMarkup" ng-if="editingRowNumber == $index" step="0.01" min="0" max="100" ng-change="calculeRateMarkup()" required>
+						<span class="error" 
+						ng-if="editingRowNumber == $index 
+						&& marginProviderForm.taxMarkup.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& !marginProviderForm.taxMarkup.$error.required
+						&& !marginProviderForm.taxMarkup.$valid">Ingresar valor numerico entre 0 y 100</span>
+					</td>
+					<td class="text-center" width="15%">
+						<p ng-if="editingRowNumber != $index">{{marginProvider.changePrevision}}%</p>
+						<input type="number" name="changePrevision"  ng-model="editValues.changePrevision" ng-if="editingRowNumber == $index" step="0.01" min="0" required>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& marginProviderForm.changePrevision.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& !marginProviderForm.changePrevision.$error.required
+						&& !marginProviderForm.changePrevision.$valid">Ingresar valor numerico mayor a 0</span>
+					</td>
+					<td class="text-center" width="5%">
+						 <a style="color:black;" class="glyphicon glyphicon-eye-open" href="/#/margenes-destino/{{marginProvider.providerId}}"></a> 
+					</td>
+					<td class="text-center" width="10%">
+						<div class="btn-group btn-toggle">
+				    		<button class="btn btn-xs btn-default"
+				    			ng-class="{active: marginProvider.active == 'true'}"
+				    			ng-click="enableDisableMargin($index)"
+				    			ng-disabled='editingRowNumber != $index'>ON</button>
+				    		<button class="btn btn-xs btn-default"
+				    			ng-class="{active: marginProvider.active == 'false'}"
+				    			ng-click="enableDisableMargin($index)"
+				    			ng-disabled='editingRowNumber != $index'>OFF</button>
+				  		</div>
+					</td>
+					<td class="text-center" width="10%">
+						<button class="glyphicon glyphicon-pencil" ng-click="activateEditMode($index)" ng-if="editingRowNumber != $index">
+						<button class="glyphicon glyphicon-ok" ng-click="updateMargin()" ng-if="editingRowNumber == $index" ng-disabled="!marginProviderForm.$valid"/>
+						<button class="glyphicon glyphicon-remove" ng-click="cancelEdition()" ng-if="editingRowNumber == $index"/>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</div>

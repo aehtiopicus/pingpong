@@ -1,0 +1,7 @@
+{
+	"grunt": {
+		"master": "./berazategui_modules/berazategui/grunt/Gruntfile.js",
+		"masterConf": "./berazategui_modules/berazategui/grunt/conf",
+		"customConf": "./gruntconf"
+	}
+}

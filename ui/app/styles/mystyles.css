@@ -1,3 +1,6 @@
+.navbar-inverse .navbar-nav>li>a:focus, .navbar-inverse .navbar-nav>li>a:hover{
+  color: #003f8a;
+}
 .row-header {
   margin: 0px auto;
   padding: 0px 0px;
@@ -15,9 +18,10 @@
 }
 .jumbotron {
   margin: 0px auto;
-  padding: 70px 30px;
-  background: #7986CB;
+  background: #015099;
   color: floralwhite;
+  height: 152px;
+  padding: 0px;
 }
 .carousel {
   background: #1a237e;
@@ -32,32 +36,42 @@
   top: 0;
 }
 .navbar-inverse {
-  background: #303f9f;
+  background: #ffffff;
   color: #ffffff;
+}
+.midas-logo img{
+  margin: 7px auto;
+    display: inline-block;
+    height: 33px;
+    width: 42px;
+}
+.midas-logo{
+      border: inherit;
+    padding: inherit;
 }
 .navbar-inverse .navbar-nav > .active > a {
-  background: #1a237e;
-  color: #ffffff;
+  background: #ffffff;
+  color: #003f8a;
 }
 .navbar-inverse .navbar-nav > .active > a:hover {
-  background: #1a237e;
-  color: #ffffff;
+  background: #ffffff;
+  color: #003f8a;
 }
 .navbar-inverse .navbar-nav > .active > a:focus {
-  background: #1a237e;
-  color: #ffffff;
+  background: #ffffff;
+  color: #003f8a;
 }
 .navbar-inverse .navbar-nav > .open > a {
-  background: #1a237e;
-  color: #ffffff;
+  background: #ffffff;
+  color: #003f8a;
 }
 .navbar-inverse .navbar-nav > .open > a:hover {
-  background: #1a237e;
-  color: #ffffff;
+  background: #ffffff;
+  color: #003f8a;
 }
 .navbar-inverse .navbar-nav > .open > a:focus {
-  background: #1a237e;
-  color: #ffffff;
+  background: #ffffff;
+  color: #003f8a;
 }
 .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
   background-color: #303f9f;
@@ -107,4 +121,30 @@ body {
       font-size: 13px;
       line-height: 1.42857143;
       color: #777;
+    }
+
+    /*pinpong*/
+
+    .login{
+      padding-top: 8px;
+    }
+    .login li {
+      margin-left: 10px;
+    }
+    .pingpong-logo{
+      transform: rotate(180deg);
+      width: 128px;
+      display: inline-block;
+      margin-right: 12px;
+    }
+
+    .flow-img{
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 200px;
+      max-height: 150px;
+    }
+    .flow-div{
+      text-align: center;
+      margin-left: -100px;
     }

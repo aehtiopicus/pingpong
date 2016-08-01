@@ -71,6 +71,27 @@ module.exports = function(grunt){
 	                    cwd: 'bower_components/angular-resource',
 	                    src: ['angular-resource.js'],
 	                    dest: 'dist/scripts/lib'
+	                }, {
+	                    //for underscore
+	                    expand: true,
+	                    dot: true,
+	                    cwd: 'bower_components/underscore',
+	                    src: ['underscore.js'],
+	                    dest: 'dist/scripts/lib'
+	                }, {
+	                    //for boostrap angular
+	                    expand: true,
+	                    dot: true,
+	                    cwd: 'bower_components/angular-bootstrap',
+	                    src: ['ui-bootstrap*.js'],
+	                    dest: 'dist/scripts/lib'
+	                },{
+	                	//for ng-flow
+	                    expand: true,
+	                    dot: true,
+	                    cwd: 'bower_components/ng-flow/dist',
+	                    src: ['ng-flow-standalone.js'],
+	                    dest: 'dist/scripts/lib'
 	                }
 	          	]
 	        },

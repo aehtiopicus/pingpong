@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('confusionApp')
+angular.module('pingpongapp')
 
         .controller('MenuController', ['$scope', 'menuFactory', function($scope, menuFactory) {
             

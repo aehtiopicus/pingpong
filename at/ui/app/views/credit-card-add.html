@@ -1,0 +1,252 @@
+<div id="hoteles-admin-ui">
+    <div ng-cloak>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12 column">
+                    <h1>{{name}}</h1>
+                    <hr>
+                </div>
+            </div>
+
+
+            <form name="promo" ng-submit="guardar()" novalidate>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-6 out-padding-left-right">
+                            <div class="col-md-6 text-left">
+                                <label><span ng-show="!bancos"
+                                             class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                                    Bancos</label>
+                            </div>
+                            <div class="col-md-6 text-right" ng-show="modo=='new'">
+                                <button type="button" class="btn btn-default btn-xs" ng-click="todosBancos(true)"
+                                        title="Todos">
+                                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default btn-xs" ng-click="todosBancos(false)"
+                                        title="Ninguno">
+                                    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                                </button>
+                            </div>
+
+                            <div class="col-md-12">
+                                <oi-select
+                                        name="selbancos"
+                                        oi-options="b.name for b in bancos"
+                                        ng-model="selbancos"
+                                        ng-required="true"
+                                        ng-disabled="!bancos||modo!='new'"
+                                        multiple
+                                        placeholder="Seleccionar uno o varios Bancos"
+                                        required
+                                        ></oi-select>
+
+                                <span style="color:red" ng-show="promo.selbancos.$dirty && promo.selbancos.$invalid">
+                                    <span ng-show="promo.selbancos.$error.required"><small>Seleccionar al menos un
+                                        Banco
+                                    </small></span>
+                                </span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6 out-padding-left-right">
+                            <div class="col-md-6 text-left">
+                                <label><span ng-show="!tarjetas"
+                                             class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                                    Tarjetas</label>
+                            </div>
+                            <div class="col-md-6 text-right" ng-show="modo=='new'">
+                                <button type="button" class="btn btn-default btn-xs" ng-click="todosTarjetas(true)"
+                                        title="Todas">
+                                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-default btn-xs" ng-click="todosTarjetas(false)"
+                                        title="Ninguna">
+                                    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="col-md-12">
+                                <oi-select
+                                        name="seltarjetas"
+                                        oi-options="t.name for t in tarjetas"
+                                        ng-model="seltarjetas"
+                                        ng-required="true"
+                                        ng-disabled="!tarjetas||modo!='new'"
+                                        multiple
+                                        placeholder="Seleccionar uno o varias tarjetas"
+                                        required
+                                        ></oi-select>
+                                <span style="color:red"
+                                      ng-show="promo.seltarjetas.$dirty && promo.seltarjetas.$invalid">
+                                    <span ng-show="promo.seltarjetas.$error.required"><small>Seleccionar al menos una
+                                        Tarjeta
+                                    </small></span>
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Fecha Desde</label>
+                            <input class="form-control" type="text" id="fechaDesde" name="fechaDesde"
+                                   ng-model="fechaDesde"
+                                   ng-required="true"
+                                   ng-disabled = "modo!='new'"
+                                   required
+                                   tarjetas-datetimepicker
+                                    />
+
+
+
+                            <label>Fecha Hasta</label>
+                            <input class="form-control" type="text" id="fechaHasta" name="fechaHasta"
+                                   ng-model="fechaHasta"
+                                   ng-required="true"
+                                   ng-disabled = "modo!='new'"
+                                   required
+                                   tarjetas-datetimepicker
+                                    />
+                            <span style="color:red" ng-show="validarFechas(fechaDesde, fechaHasta)">
+                                <span ><small>Fecha Desde es superior a fecha Hasta</small></span>
+                            </span>
+                        </div>
+
+
+
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-directive table-striped table-hover table-min">
+                            <thead class="thead-directive">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Cuotas</th>
+                                <th class="text-center">Intereses %</th>
+                                <th class="text-center">GCA %</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="cuota in cuotas" class="text-center">
+                                <td><input type="checkbox" ng-model="cuota.select" ng-disabled="cuota.selectDisabled||modo!='new'">
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="cuota.cuotas" max="50" style="max-width: 75px;"
+                                           ng-disabled="!cuota.select||modo!='new'">
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="cuota.intereses" min="0" max="100"
+                                           style="max-width: 75px;" ng-disabled="!cuota.select||modo!='new'"
+                                           ng-required="cuota.select">
+                                </td>
+                                <td>
+                                    <input type="number" ng-model="cuota.gca" min="0" max="{{gcaConfig}}"
+                                           style="max-width: 75px;" ng-disabled="!cuota.select||modo!='new'">
+                                </td>
+                                <td>
+                                    <button type="button" ng-show="cuota.isDelete&&modo=='new'"
+                                            ng-click="removeRow(cuotas.indexOf(cuota))" class="btn btn-danger btn-sm"><i
+                                            class="glyphicon glyphicon-remove"></i></button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <button type="button" ng-click="agregar()" class="btn btn-default btn-xs" style="margin-top:1%" ng-show="modo=='new'">
+                            <i class="glyphicon glyphicon-plus"> Cuota</i></button>
+
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+
+                    <!-- Tabla de edición de errores-->
+
+                    <div class="col-md-12" ng-show="errorCuotas.length!==0">
+                        <br/>
+
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Error!</strong> Existen combinaciones de reglas que se solapan con otras ya
+                            existentes. Por favor, modifique la fecha y vuelva a seleccionar "Guardar" para
+                            reintentar.
+                        </div>
+                        <table class="table table-directive table-striped table-hover main">
+                            <thead class="thead-directive">
+                            <tr>
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                    Bancos
+                                </th>
+                                <th>
+                                    Tarjetas
+                                </th>
+                                <th>
+                                    Cuotas
+                                </th>
+                                <th>
+                                    Intereses
+                                </th>
+                                <th>
+                                    GCA
+                                </th>
+                                <th>
+                                    Fecha Desde
+                                </th>
+                                <th>
+                                    Fecha Hasta
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tr ng-repeat="obj in objects | filter:errFilter">
+                                <td>{{obj.id}}</td>
+                                <td>{{obj.bankName}}</td>
+                                <td>{{obj.creditCardName}}</td>
+                                <td>{{obj.installmentCount}}</td>
+                                <td>{{obj.interest * 100 | number:2}}%</td>
+                                <td>{{obj.gcaPercent * 100 | number:2}}%</td>
+                                <td><input class="form-control" type="text"
+                                           ng-model="obj.startDate"
+                                           ng-required="true"
+                                           required
+                                           tarjetas-datetimepicker
+                                        /><small>{{errorCuotas[obj.id].ccConflict.startDate}}</small>
+                                </td>
+                                <td><input class="form-control" type="text"
+                                           ng-model="obj.finishDate"
+                                           ng-required="true"
+                                           required
+                                           tarjetas-datetimepicker
+                                        />
+                                        <small>{{errorCuotas[obj.id].ccConflict.finishDate}}</small>
+                                        <span style="color:red" ng-show="validarFechas(obj.startDate, obj.finishDate)">
+                                            <span ><small>Fecha Desde es superior a fecha Hasta</small></span>
+                                        </span>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <!-- Tabla de edición de errores-->
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="submit" class="btn btn-primary" value="Guardar" ng-disabled="!promo.$valid || validDate || validarFechasButton()">
+                        <input type="button" class="btn btn-default" value="Reiniciar" ng-click="reloadPage()">
+                        <input type="button" class="btn btn-default" value="Volver" ng-click="back()">
+                    </div>
+                </div>
+
+
+            </form>
+
+        </div>
+    </div>
+</div>

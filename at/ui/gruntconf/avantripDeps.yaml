@@ -1,0 +1,8 @@
+
+avantripDeps:    
+  deps:
+    -
+      name: 'berazategui-home'
+      artifact: 'berazategui-home'
+      group: 'com.avantrip.berazategui'
+    

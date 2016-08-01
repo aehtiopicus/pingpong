@@ -1,13 +1,15 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-toggletarget="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" ui-sref="app"><img src="images/logo.png" height=30 width=41></a>
+                </button>               
+                <a class="navbar-brand midas-logo" ui-sref="app">
+                    <img src="images/midas.png">
+                </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -15,14 +17,34 @@
                         <span class="glyphicon glyphicon-home"
                          aria-hidden="true"></span> Home</a></li>
                     <li><a ui-sref="app.aboutus">
-                        <span class="glyphicon glyphicon-info-sign"
-                         aria-hidden="true"></span> About</a></li>
+                        <span class="glyphicon glyphicon-user"
+                         aria-hidden="true"></span> Participantes</a></li>
                     <li><a ui-sref="app.menu">
-                         <span class="glyphicon glyphicon-list-alt"
+                         <span class="glyphicon glyphicon-calendar"
                          aria-hidden="true"></span> 
-                         Menu</a></li>
-                     <li><a ui-sref="app.contactus">
-                     <i class="fa fa-envelope-o"></i> Contact</a></li>
+                         Fechas</a></li>                     
+                </ul>
+                <ul class="nav navbar-nav navbar-center">
+                </ul>                
+                <ul class="nav navbar-nav navbar-right login" ng-controller="LoginController">
+                    <li>
+                        <input type="text" class="form-control" placeholder="usuario" aria-describedby="basic-addon1" ng-model="loginData.userName">
+                    </li>
+                    <li>
+                        <input type="password" class="form-control" placeholder="password" aria-describedby="basic-addon1" ng-model="loginData.password">
+                    </li>
+                    <li>
+                        <button class="btn btn-primary" ng-click="doLogin()">
+                            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                            Log in
+                        </button>
+                    </li>
+                    <li>                        
+                        <button class="btn btn-info" ng-controller="InscripcionController" ng-click="open()">
+                            <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>
+                            Inscripci&oacute;n
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -35,18 +57,73 @@
         <div class="container">
             <div class="row row-header">
                 <div class="col-xs-12 col-sm-8">
-                    <h1>Ristorante con Fusion</h1>
-                    <p style="padding:40px;"></p>
-                    <p>We take inspiration from the World's best cuisines, and create
-                     a unique fusion experience. Our lipsmacking creations will 
-                     tickle your culinary senses!</p>
-                </div>
-                <div class="col-xs-12 col-sm-2">
-                <p style="padding:20px;"></p>
-                <img src="images/logo.png" class="img-responsive">
-                </div>
-                <div class="col-xs-12 col-sm-2">
-                </div>
+                    <h1><img src="images/pp.png" class="img-responsive pingpong-logo" style="transform:rotate(180deg)">
+                    Torneo Ping Pong
+                    </h1>
+                </div>                
             </div>
         </div>
     </header>
+
+
+   
+    <script type="text/ng-template" id="inscripcion.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Inscripci&oacute;n de participantes</h3>
+        </div>
+        <div class="modal-body">
+              <form class="form-horizontal" name="inscripcionForm" ng-submit="submitComment()" novalidate>
+                <div class="form-group" ng-class="{ 'has-error' : inscripcionForm.nombre.$error.required && !inscripcionForm.nombre.$pristine }">
+                    <label for="nombre" class="col-sm-2 control-label">Nombre</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre... " ng-model="miembro.nombre" required>                              
+                      <span ng-show="inscripcionForm.nombre.$error.required && !inscripcionForm.nombre.$pristine" class="help-block">Nombre requerido</span>
+                    </div>
+             
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : inscripcionForm.apellido.$error.required && !inscripcionForm.apellido.$pristine }">
+                  <label for="apellido" class="col-sm-2 control-label" style="padding-left: 0px;">Apellido</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido... " ng-model="miembro.apellido" required>                              
+                      <span ng-show="inscripcionForm.apellido.$error.required && !inscripcionForm.apellido.$pristine" class="help-block">Apellido requerido</span>                    
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : inscripcionForm.usuario.$error.required && !inscripcionForm.usuario.$pristine }">
+                  <label for="usuario" class="col-sm-2 control-label" style="padding-left: 0px;">Usuario</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario... " ng-model="miembro.usuario" required>                              
+                      <span ng-show="inscripcionForm.usuario.$error.required && !inscripcionForm.usuario.$pristine" class="help-block">Usuario requerido</span>                    
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : inscripcionForm.passwd.$error.required && !inscripcionForm.passwd.$pristine }">
+                    <label for="passwd" class="col-sm-2 control-label" style="padding-left: 0px;">Contraseña</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="passwd" name="passwd" placeholder="Contraseña... " ng-model="miembro.passwd" required>                              
+                        <span ng-show="inscripcionForm.passwd.$error.required && !inscripcionForm.passwd.$pristine" class="help-block">Contraseña requerida</span>                    
+                    </div>
+                </div>  
+                <div class="form-group">
+                 <label for="passwd" class="col-sm-2 control-label" style="padding-left: 0px;">Avatar</label>
+                   <div flow-init="{singleFile:true}" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-drop
+                   flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}" ng-style="style" class="col-sm-10" flow-name="flowData.flow">
+                                                                        
+                        <div class="flow-div">              
+                            <img id="userAvatar" ng-model="miembro.avatarImg" flow-img="$flow.files[0]" class="flow-img"/>
+                            <img src="images/avatar.png" ng-show="!$flow.files[0]" class="flow-img" ng-model="miembro.avatarImg"/>
+                        </div>
+                        <br/>
+                        <span class="btn btn-primary" ng-show="!$flow.files.length" flow-btn="">Seleccione imagen<input type="file" style="visibility: hidden; position: absolute;"></span>
+                        <span class="btn btn-info" ng-show="$flow.files.length" flow-btn="">Cambie imagen<input type="file" style="visibility: hidden; position: absolute;"></span>
+                    </div>
+                </div>                  
+               
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-disabled="inscripcionForm.$invalid" type="button" ng-click="ok()">OK</button>
+                    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+                </div>
+
+              </form>
+        </div>       
+    </script>  
+

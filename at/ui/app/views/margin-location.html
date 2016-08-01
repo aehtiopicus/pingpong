@@ -1,0 +1,161 @@
+<style type="text/css">
+	input[type="number"]{
+		font-size: 14px !important;
+		text-align: center;
+		width: 70px !important;
+		height: 30px !important;
+	}
+	span.error{
+		display:block;
+		color:red;
+	}
+</style>
+
+<div id="hoteles-admin-ui">
+	<form name="marginLocationForm">
+		<div ng-cloak>
+			<a style="color:black; font-size:30px; margin-top: 15px;" class="glyphicon glyphicon-circle-arrow-left" href="/#/margenes-proveedor"></a>
+			<div class="header">
+			    <h1>{{providerTitle}} {{marginProvider.providerName}}</h1>
+			</div>
+		    <alert ng-if="alert"
+		    	type="{{alert.type}}"
+		    	close="closeAlert()">{{alert.msg}}</alert>
+			<table border="1" ng-class="center" width="80%" align="center" >
+				<tr>
+					<th ng-repeat="providerColumnTitle in providerColumnTitles" class="text-center" bgcolor="lightgray">
+						{{providerColumnTitle}}
+					</th>
+				</tr>
+				<tr>
+					<td class="text-center" width="10%">
+						<p>{{marginProvider.providerName}}</p>
+					</td>
+					<td class="text-center" width="20%">
+						<p ng-if="!isProviderEditing">{{marginProvider.marginApplied}}%</p>
+						<input type="number" name="marginApplied" ng-model="marginProviderEditingValues.marginApplied" ng-if="isProviderEditing"  step="0.01" min="0" max="100" required>
+						<span class="error" 
+						ng-if="isProviderEditing
+						&& marginLocationForm.marginApplied.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="isProviderEditing
+						&& !marginLocationForm.marginApplied.$error.required
+						&& !marginLocationForm.marginApplied.$valid">Ingresar valor numerico entre 0 y 100</span>
+					</td>
+					<td class="text-center" width="15%">
+						<p ng-if="!isProviderEditing">{{marginProvider.rateMarkup}}%</p>
+						<input type="number" name="rateMarkup" ng-model="marginProviderEditingValues.rateMarkup" ng-if="isProviderEditing"  step="0.01" min="0" max="100" ng-change="calculeTaxMarkupProvider()" required>
+						<span class="error" 
+						ng-if="isProviderEditing
+						&& marginLocationForm.rateMarkup.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="isProviderEditing
+						&& !marginLocationForm.rateMarkup.$error.required
+						&& !marginLocationForm.rateMarkup.$valid">Ingresar valor numerico entre 0 y 100</span>
+					</td>
+					<td class="text-center" width="15%">
+						<p ng-if="!isProviderEditing">{{marginProvider.taxMarkup}}%</p>
+						<input type="number" name="taxMarkup" ng-model="marginProviderEditingValues.taxMarkup" ng-if="isProviderEditing"  step="0.01" min="0" max="100" ng-change="calculeRateMarkupProvider()" required>
+						<span class="error" 
+						ng-if="isProviderEditing
+						&& marginLocationForm.taxMarkup.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="isProviderEditing
+						&& !marginLocationForm.taxMarkup.$error.required
+						&& !marginLocationForm.taxMarkup.$valid">Ingresar valor numerico entre 0 y 100</span>
+					</td>
+					<td class="text-center" width="20%">
+						<p ng-if="!isProviderEditing">{{marginProvider.changePrevision}}%</p>
+						<input type="number" name="changePrevision" ng-model="marginProviderEditingValues.changePrevision" ng-if="isProviderEditing"  step="0.01" min="0" required>
+						<span class="error" 
+						ng-if="isProviderEditing
+						&& marginLocationForm.changePrevision.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="isProviderEditing
+						&& !marginLocationForm.changePrevision.$error.required
+						&& !marginLocationForm.changePrevision.$valid">Ingresar valor numerico mayor a 0</span>
+					</td>
+					<td class="text-center" width="20%">
+						<button class="glyphicon glyphicon-pencil" ng-click="enableProviderMarginEdition()" ng-if="!isProviderEditing">
+						<button class="glyphicon glyphicon-ok" ng-click="updateMarginProvider()" ng-if="isProviderEditing" ng-disabled="!marginLocationForm.$valid"/>
+						<button class="glyphicon glyphicon-remove" ng-click="cancelProviderMarginEdition()" ng-if="isProviderEditing"/>
+					</td>
+				</tr>
+			</table>
+
+			<div class="header">
+			    <h1>{{locationTitle}} {{marginProvider.providerName}}</h1>
+			</div>
+			<table style="margin-bottom: 25px;" border="1" ng-class="center" width="80%" align="center" >
+				<tr>
+					<th ng-repeat="locationColumnTitle in locationColumnTitles" class="text-center" bgcolor="lightgray">
+						{{locationColumnTitle}}
+					</th>
+				</tr>
+				<tr ng-repeat="marginLocation in marginLocations" style="heigth: 30px">
+					<td class="text-center" width="20%">
+						<p data-toggle="tooltip" title="{{marginLocation.locationPath}}">{{marginLocation.locationName}}</p>
+					</td>
+					<td class="text-center" width="10%">
+						<p>{{marginLocation.locationId}}</p>
+					</td>
+					<td class="text-center" width="15%">
+						<p ng-if="editingRowNumber != $index">{{marginLocation.marginApplied}}%</p>
+						<input type="number" name="marginApplied" ng-model="marginLocationEditingValues.marginApplied" ng-if="editingRowNumber == $index"  step="0.01" min="0" max="100" required>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& marginLocationForm.marginApplied.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& !marginLocationForm.marginApplied.$error.required
+						&& !marginLocationForm.marginApplied.$valid">Ingresar valor numerico entre 0 y 100</span>
+					</td>
+					<td class="text-center" width="10%">
+						<p ng-if="editingRowNumber != $index">{{marginLocation.rateMarkup}}%</p>
+						<input type="number" name="rateMarkup" ng-model="marginLocationEditingValues.rateMarkup" ng-if="editingRowNumber == $index"  step="0.01" min="0" max="100" ng-change="calculeTaxMarkupLocation()" required>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& marginLocationForm.rateMarkup.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& !marginLocationForm.rateMarkup.$error.required
+						&& !marginLocationForm.rateMarkup.$valid">Ingresar valor numerico entre 0 y 100</span>
+					</td>
+					<td class="text-center" width="10%">
+						<p ng-if="editingRowNumber != $index">{{marginLocation.taxMarkup}}%</p>
+						<input type="number" name="taxMarkup" ng-model="marginLocationEditingValues.taxMarkup" ng-if="editingRowNumber == $index"  step="0.01" min="0" max="100" ng-change="calculeRateMarkupLocation()" required>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& marginLocationForm.taxMarkup.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& !marginLocationForm.taxMarkup.$error.required
+						&& !marginLocationForm.taxMarkup.$valid">Ingresar valor numerico entre 0 y 100</span>
+					</td>
+					<td class="text-center" width="15%">
+						<p ng-if="editingRowNumber != $index">{{marginLocation.changePrevision}}%</p>
+						<input type="number" name="changePrevision" ng-model="marginLocationEditingValues.changePrevision" ng-if="editingRowNumber == $index"  step="0.01" min="0" required>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& marginLocationForm.changePrevision.$error.required">Campo requerido</span>
+						<span class="error" 
+						ng-if="editingRowNumber == $index
+						&& !marginLocationForm.changePrevision.$error.required
+						&& !marginLocationForm.changePrevision.$valid">Ingresar valor numerico mayor a 0</span>
+					</td>
+					<td class="text-center" width="10%">
+						<a style="color:black;" class="glyphicon glyphicon-eye-open" href="/#/margen-destino/{{marginLocation.locationId}}"></a> 
+					</td>
+					<td class="text-center" width="10%">
+						<button class="glyphicon glyphicon-pencil" ng-click="enableLocationMarginEdition($index)" ng-if="editingRowNumber != $index">
+						<button class="glyphicon glyphicon-ok" ng-click="updateMarginLocation()" ng-if="editingRowNumber == $index" ng-disabled="!marginLocationForm.$valid"/>
+						<button class="glyphicon glyphicon-remove" ng-click="cancelLocationMarginEdition()" ng-if="editingRowNumber == $index"/>
+					</td>
+					<!--td class="text-center" width="10%">
+						<button class="glyphicon glyphicon-trash" disabled>					
+					</td-->
+				</tr>
+			</table>
+		</div>
+	</form>
+</div>

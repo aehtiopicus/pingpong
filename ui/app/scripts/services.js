@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('confusionApp')
+angular.module('pingpongapp')
         .constant('baseUrl','http://localhost:3000/')
         .service('menuFactory',['$resource','baseUrl', function($resource, baseUrl) {
     
@@ -42,6 +42,46 @@ angular.module('confusionApp')
                 return $resource(baseUrl+'feedback');
               }
             };
+        }])
+
+        .factory('miembroFactory', ['$resource','baseUrl',function($resource,baseUrl){
+          
+            return $resource(baseUrl+'miembros',null,
+                {
+                    list : {
+                        method : 'GET',
+                        isArray : true
+                    },
+                    getOne : {
+                        method : 'GET',
+                        isArray : false,
+                        url : baseUrl + '/:id'
+                    },
+                    update : {
+                        method : 'PUT',
+                        isArray : false,
+                        url : baseUrl + '/:id'
+                    },
+                    create : {
+                        method : 'POST',
+                        isArray : false
+                        /*interceptor: {
+                            response: function(response) {      
+                                var result = response.resource;        
+                                result.$status = response.status;
+                                return result;
+                            },
+                            responseError :function(response) {      
+                                var result = response;        
+                                result.$status = response.status;
+                                return result;
+                            }
+                        }*/
+                    }
+
+
+                });
+                        
         }])
 
 ;

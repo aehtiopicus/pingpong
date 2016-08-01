@@ -1,0 +1,44 @@
+<div id="hoteles-admin-ui">
+    <div class="header">
+        <h1>Admin Markup</h1>
+     </div>
+    <div class="content">
+        <h1>Listado de Reglas</h1>
+        <table class=" table table-hover">
+
+            <thead>
+                <tr>
+                    <th>
+                        <div>Nombre</div>
+                    </th>
+                    <th>
+                        <div>Descripción</div>
+                    </th>
+                    <th>
+                        <div>
+                            <!--  -->
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="rule in rules">
+                    <td>
+                        <div><a href="#{{rule.viewUrl}}">{{rule.name}}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div>{{rule.description}}</div>
+                    </td>
+                    <td class="edit-column">
+                        <div>
+                            <a href="#{{rule.viewUrl}}" class="edit-link"><i class="fa fa-pencil">
+                                </i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

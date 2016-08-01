@@ -1,0 +1,13 @@
+{
+ "status": "ok",
+
+ "hotels": [
+     {
+	 "id": 1234,
+	 "name": "Hotel 1",
+	 "calificacion": "123"
+
+     }
+ ]
+
+}

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('confusionApp', ['ui.router','ngResource'])
-.config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $urlRouterProvider) {
+angular.module('pingpongapp', ['ui.router','ngResource','ui.bootstrap','flow'])
+.config(['$stateProvider', '$urlRouterProvider','flowFactoryProvider',function($stateProvider, $urlRouterProvider,flowFactoryProvider) {
         $stateProvider
         
             // route for the home page
@@ -67,5 +67,13 @@ angular.module('confusionApp', ['ui.router','ngResource'])
             });
     
         $urlRouterProvider.otherwise('/');
+        flowFactoryProvider.defaults = {
+            target: '/upload',
+            permanentErrors:[404, 500, 501]
+        };
+    // You can also set default events:
+        flowFactoryProvider.on('catchAll', function (event) {
+            console.log(event);      
+        });
     }])
 ;

@@ -1,0 +1,16 @@
+dist
+lib
+node_modules
+bower_components
+.tmp
+.sass-cache
+app/bower_components
+test/bower_components
+avantrip_modules/
+berazategui_modules/
+export/
+*.generated.*
+*.version.config.*
+*.bkp
+*~
+

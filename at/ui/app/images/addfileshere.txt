@@ -1,0 +1,55 @@
+        /* global angularApp */
+(function(){
+
+    'use strict';
+
+    angularApp.controller({'MarkupDefaultController': function(MarkupDefaultService, $scope) {      
+            var date = {'name':'date',
+                        'format':'yyyy-MM-dd'};
+   
+            $scope.columns =  [ {'name':'Markup',
+                                 'id':'markup'},
+                                {'name':'Fecha Desde',
+                                 'id':'startDate',
+                                 'type':date},
+                                {'name':'Fecha Hasta',
+                                 'id':'finishDate',
+                                 'type':date}];
+
+            $scope.crudOperations = {
+                    onUpdate: function(object, onSucces, onError){
+                        MarkupDefaultService.update(object,function(){
+                            onSucces(object,'ok');         
+                        },
+                        function(){
+                            onError('error');
+                        });                      
+                    },
+                    onCreate: function(object, onSucces, onError){
+                         MarkupDefaultService.create(object,function(){
+                                        onSucces(object,'ok');      
+                                },function(){
+                                    onError('error');
+                                });         
+                    },
+                    onList:function(onSucces, onError){
+                        MarkupDefaultService.list({}).$promise.then(function(data){
+                                    onSucces(data,'ok');            
+                                }, function(){
+                                    onError('error');
+                                });
+                    },
+                    onDelete:function(object, onSucces, onError){
+                        //no se puede eliminar el markup por default                        
+                        MarkupDefaultService.delete(object,
+                                    function(){
+                                        onSucces({},'ok');   
+                                    },function(){
+                                        onError('error');
+                                    });
+                    }              
+                };
+            }
+    });
+
+})();
