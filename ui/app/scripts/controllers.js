@@ -156,19 +156,45 @@ angular.module('pingpongapp')
             
         }])
 
-        .controller('AboutController',['$scope','corporateFactory',function($scope,corporateFactory){
+        .controller('ParticipantesController',['$scope','miembroFactory','MatchInformationFactory',function($scope,miembroFactory,MatchInformationFactory){
             
-            $scope.showEmployees = false;
-            $scope.employeesMessage = 'Loading ...'; 
-            corporateFactory.getLeader().query(
-                function (response){
-                    $scope.employeesList = response;
-                    $scope.showEmployees = true;
+            $scope.miembros = [];
+            miembroFactory.list().$promise.then(
+                function(responseOk){
+                    $scope.miembros = responseOk;
                 },
-                function (response){
-                    $scope.employeeMessage = 'Error: '+response.status + ' '+response.statusText;
+                function(responseFailure){
+                    console.log(responseFailure);
+                    $scope.miembros = [];
                 }
+
             );
+
+            $scope.getStatusData = function(miembro,callback){
+
+                var _playInfo = {
+                            pj : 0, 
+                            po : 0 
+                };              
+                MatchInformationFactory.list().$promise.then(
+                    function(resultOk){                                  
+                        resultOk.forEach(function(element){
+                            if(element.players[0].id === miembro.id || element.players[1].id === miembro.id){
+                                _playInfo.pj ++;
+                                if(element.ganador.id === miembro.id ){
+                                     _playInfo.p0 = _playInfo.p0+3;
+                                }
+                            }
+                        });
+                        callback(_playInfo);
+                    },
+                    function(resultFailure){
+                        console.log(resultFailure);
+                        callback(null);
+                    }
+                );
+                console.log(miembro,callback);
+            };
         }])
 
 ;

@@ -1,4 +1,4 @@
-/* global angular _*/
+/* global angular,_*/
 /*jshint unused: false*/
 /*jshint debug: true*/
 'use strict';
@@ -23,20 +23,26 @@ angular.module('pingpongapp').
 
 				debugger;
 
-				if(!attr.info){
+				if(attr.info === 'false'){
 
 					var _restrieveDataFn = $parse(scope.statusData());
-					if(_restrieveDataFn()){
+					/*if(_restrieveDataFn()){
 						scope.mostrar = true;
-					}
-					scope.mostrarEstadisticas = function(){
-						MatchInformationFactory.list().$promise.then(
-						function(resultOk){
+					}*/
+					scope.mostrar = true;
+
+					var _matchInfo = function(info){
+						if(!_.isNull(info)){
+							scope.pj = info.pj;
+							scope.po = info.po;
 							scope.statsReady = true;
-						},
-						function(resultFailure){
+						}else{
 							scope.statsReady = false;
-						});				
+						}
+					};
+
+					scope.mostrarEstadisticas = function(){
+						var machData = _restrieveDataFn(scope.miembro,_matchInfo);						
 					};
 
 					scope.ocultarEstadisticas = function(){

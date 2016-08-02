@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('pingpongapp').
-	controller('LoginController',['$scope','$log','miembroFactory','localStorageService','ControllerCommunicationFactory',function($scope,$log,miembroFactory,localStorageService,ControllerCommunicationFactory){
+	controller('LoginController',['$scope','$log','miembroFactory','localStorageService','ControllerCommunicationFactory','$state',function($scope,$log,miembroFactory,localStorageService,ControllerCommunicationFactory,$state){
 		
 		var _userLoggedKey = localStorageService.retrieveKey(localStorageService.availableKeys()[0]);
 		
@@ -60,6 +60,7 @@ angular.module('pingpongapp').
 			localStorageService.removeFromLocalStorage(_userLoggedKey);
 			_clearLogin();	
 			ControllerCommunicationFactory.emitMsg(ControllerCommunicationFactory.logoutCompleted,'out');                 		
+			$state.go('app');
 		};
 		
 

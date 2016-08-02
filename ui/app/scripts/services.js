@@ -90,7 +90,7 @@ angular.module('pingpongapp')
                         
         }])
       .service('localStorageService',[function() {
-            var _keys = {loginInfo : 'logInfo'};
+            var _keys = {loginInfo : 'logInfo',partidos :'partidos'};
             var lsObject = {
                 date : null,
                 value : null

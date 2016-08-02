@@ -23,12 +23,12 @@ angular.module('pingpongapp', ['ui.router','ngResource','ui.bootstrap','flow'])
             })
         
             // route for the aboutus page
-            .state('app.aboutus', {
-                url:'aboutus',
+            .state('app.participantes', {
+                url:'participantes',
                 views: {
                     'content@': {
-                        templateUrl : 'views/aboutus.html',
-                        controller  : 'AboutController'                  
+                        templateUrl : 'views/participantes.html',
+                        controller  : 'ParticipantesController'                  
                     }
                 }
             })
