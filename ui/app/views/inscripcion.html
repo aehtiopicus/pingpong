@@ -1,0 +1,57 @@
+<div class="modal-header">
+            <h3 class="modal-title">Inscripci&oacute;n de participantes</h3>
+        </div>
+        <div class="modal-body">
+              <form class="form-horizontal" name="inscripcionForm" ng-submit="submitComment()" novalidate>
+                <div class="form-group" ng-class="{ 'has-error' : inscripcionForm.nombre.$error.required && !inscripcionForm.nombre.$pristine }">
+                    <label for="nombre" class="col-sm-2 control-label">Nombre</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre... " ng-model="miembro.nombre" required>                              
+                      <span ng-show="inscripcionForm.nombre.$error.required && !inscripcionForm.nombre.$pristine" class="help-block">Nombre requerido</span>
+                    </div>
+             
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : inscripcionForm.apellido.$error.required && !inscripcionForm.apellido.$pristine }">
+                  <label for="apellido" class="col-sm-2 control-label" style="padding-left: 0px;">Apellido</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido... " ng-model="miembro.apellido" required>                              
+                      <span ng-show="inscripcionForm.apellido.$error.required && !inscripcionForm.apellido.$pristine" class="help-block">Apellido requerido</span>                    
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : inscripcionForm.usuario.$error.required && !inscripcionForm.usuario.$pristine }">
+                  <label for="usuario" class="col-sm-2 control-label" style="padding-left: 0px;">Usuario</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario... " ng-model="miembro.usuario" required>                              
+                      <span ng-show="inscripcionForm.usuario.$error.required && !inscripcionForm.usuario.$pristine" class="help-block">Usuario requerido</span>                    
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : inscripcionForm.passwd.$error.required && !inscripcionForm.passwd.$pristine }">
+                    <label for="passwd" class="col-sm-2 control-label" style="padding-left: 0px;">Contraseña</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="passwd" name="passwd" placeholder="Contraseña... " ng-model="miembro.passwd" required>                              
+                        <span ng-show="inscripcionForm.passwd.$error.required && !inscripcionForm.passwd.$pristine" class="help-block">Contraseña requerida</span>                    
+                    </div>
+                </div>  
+                <div class="form-group">
+                 <label for="passwd" class="col-sm-2 control-label" style="padding-left: 0px;">Avatar</label>
+                   <div flow-init="{singleFile:true}" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-drop
+                   flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}" ng-style="style" class="col-sm-10" flow-name="flowData.flow">
+                                                                        
+                        <div class="flow-div">              
+                            <img id="userAvatar" ng-model="miembro.avatarImg" flow-img="$flow.files[0]" class="flow-img"/>
+                            <img src="images/avatar.png" ng-show="!$flow.files[0]" class="flow-img" ng-model="miembro.avatarImg"/>
+                        </div>
+                        <br/>
+                        <span class="btn btn-primary" ng-show="!$flow.files.length" flow-btn="">Seleccione imagen<input type="file" style="visibility: hidden; position: absolute;"></span>
+                        <span class="btn btn-info" ng-show="$flow.files.length" flow-btn="">Cambie imagen<input type="file" style="visibility: hidden; position: absolute;"></span>
+                    </div>
+                </div>                  
+               
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-disabled="inscripcionForm.$invalid" type="button" ng-click="ok()">OK</button>
+                    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+                </div>
+
+              </form>
+        </div>

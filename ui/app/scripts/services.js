@@ -181,4 +181,36 @@ angular.module('pingpongapp')
 
     }])
 
+    .factory('FixtureInformationController',['$resource','baseUrl',function($resource,baseUrl){        
+        return $resource(baseUrl+'fixture',null,
+                {
+                    list : {
+                        method : 'GET',
+                        isArray : true
+                    },
+                    getOne : {
+                        method : 'GET',
+                        isArray : false,
+                        url : baseUrl + 'fixture/:id'
+                    },
+                    update : {
+                        method : 'PUT',
+                        isArray : false,
+                        url : baseUrl + 'fixture/:id'
+                    },
+                    create : {
+                        method : 'POST',
+                        isArray : false                       
+                    },
+                    remove : {
+                        method : 'DELETE',
+                        isArray : false,
+                        url : baseUrl + 'fixture/:id'
+                    }
+
+
+                });
+
+    }])
+
 ;

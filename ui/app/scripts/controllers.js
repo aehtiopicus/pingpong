@@ -114,8 +114,9 @@ angular.module('pingpongapp')
             };
         }])
 
-        .controller('IndexController',['$scope','localStorageService','ControllerCommunicationFactory',function($scope,localStorageService,ControllerCommunicationFactory){            
-            ControllerCommunicationFactory.onMsg(ControllerCommunicationFactory.loginCompleted,$scope,function(emitScope,miembro){
+        .controller('GlobalController',['$scope','ControllerCommunicationFactory','localStorageService',function($scope,ControllerCommunicationFactory,localStorageService){            
+             $scope.loginRequired = false;
+             ControllerCommunicationFactory.onMsg(ControllerCommunicationFactory.loginCompleted,$scope,function(emitScope,miembro){
                 $scope.loadUser(miembro);
             });
 
@@ -139,16 +140,6 @@ angular.module('pingpongapp')
             (function(){
                 $scope.loadUser(localStorageService.retrieveFromLocalStorage(_userLoggedKey));
             })();
-                       
-            
-        }])
-
-        .controller('GlobalController',['$scope','ControllerCommunicationFactory',function($scope,ControllerCommunicationFactory){            
-            ControllerCommunicationFactory.onMsg(ControllerCommunicationFactory.loginCompleted,$scope,function(emitScope,miembro){
-                if(!_.isUndefined($scope.loadUser)){
-                    $scope.loadUser(miembro);
-                }
-            });
 
             $scope.unsubscribe = function(miembro){
                 ControllerCommunicationFactory.emitMsg(ControllerCommunicationFactory.unsubscribe,miembro);
@@ -170,8 +161,7 @@ angular.module('pingpongapp')
 
             );
 
-            $scope.getStatusData = function(miembro,callback){
-
+            $scope.getStatusData = function(miembro,callback){                
                 var _playInfo = {
                             pj : 0, 
                             po : 0 
@@ -196,5 +186,202 @@ angular.module('pingpongapp')
                 console.log(miembro,callback);
             };
         }])
+
+         .controller('FixtureController',['$scope','FixtureInformationController','$uibModal','$log','miembroFactory',
+            function($scope,FixtureInformationController,$uibModal,$log,miembroFactory){            
+            $scope.fixture = {};
+            $scope.callBacks = 0;
+            var fixtureFunction = function(response){
+                $scope.fixture.fechas = _.sortBy(response,function(element){
+                        return element.nro;
+                });
+                $scope.fixture.nroFechas = $scope.fixture.fechas.length;  
+                if($scope.fixture.nroFechas === 0){
+                    $scope.generated = true;
+                } else{
+                     $scope.generated = false;
+                }            
+            };
+            var removeFunction = function(element){
+                FixtureInformationController.remove({id:element}).$promise.then(
+                    function(){
+                       console.log('removed');
+                    },
+                    function(){
+                        console.log('error');
+                    }
+                );
+            };
+            $scope.eliminar = function(){
+                for(var i = 0 ; i< $scope.fixture.fechas.length; i++){
+                    removeFunction($scope.fixture.fechas[i].id);
+                }
+                fixtureFunction([]);
+            };
+
+            FixtureInformationController.list().$promise.then(
+                function(responseOk){
+                    fixtureFunction(responseOk);
+                },
+                function(resultFailure){
+                     console.log(resultFailure);
+                }
+            );
+
+            miembroFactory.list().$promise.then(
+                function(responseOk){
+                    $scope.miembros = responseOk;
+                },
+                function(responseFailure){
+                    console.log(responseFailure);
+                }
+            ); 
+
+            var _createFechas = function(_fecha){
+                  FixtureInformationController.create(_fecha).$promise.then(
+                    function (responseOk){
+                        $scope.callBacks--;
+                        $scope.fixture.fechas_tmp.push(responseOk);
+                        if($scope.callBacks === 0){
+                            fixtureFunction($scope.fixture.fechas_tmp);
+                        }
+                    },
+                    function (resultFailure){
+                        console.log(resultFailure);
+                        $scope.callBacks--;
+                        if($scope.callBacks === 0){
+                            fixtureFunction($scope.fixture.fechas_tmp);
+                        }
+                    }
+                );
+            }; 
+            var _createOponents = function(miembro,miembros){
+                var _players = [];
+                miembros.forEach(function(_miembro){                    
+                    _players.push({player1 : miembro, player2:_miembro});
+                });
+                return _players;
+            };
+            var _makeFechaWithPlayer = function(nro){
+                var fecha ={
+                        nro : nro,
+                        players : []
+                };
+                var _miembros = JSON.parse(JSON.stringify($scope.miembros));
+                _miembros.forEach(function(_miembro){                    
+                    delete _miembro.superUser;
+                    delete _miembro.passwd;
+                    delete _miembro.avatarImg;
+                });
+                while(_miembros.length > 1){
+                    Array.prototype.push.apply(fecha.players,(_createOponents(_miembros.splice(0,1)[0],_miembros)));
+                }
+                return fecha;
+            };  
+            
+            $scope.checkNewValue = function(){           
+                console.log($scope.fixture.nroFechas);
+            };
+            $scope.generar = function(){
+                var _fechas = [];
+                for(var i = 0; i < $scope.fixture.nroFechas; i++){
+                    _fechas.push(_makeFechaWithPlayer(i+1));
+                }
+                 $scope.callBacks = _fechas.length;
+                 $scope.fixture.fechas_tmp = [];
+                _fechas.forEach(function(_fecha){
+                    _createFechas(_fecha);
+                });                
+
+            };
+            $scope.openFecha = function(fecha){
+                var modalInstance = $uibModal.open({
+                    animation: $scope.animationsEnabled,
+                    templateUrl: 'views/fechasConfig.html',
+                    controller: 'FechasConfigController',
+                    resolve: {
+                        fecha: fecha,
+                    }
+                });
+            
+                modalInstance.result.then(function (selectedItem) {      
+                    $scope.loginCompleted(selectedItem);
+                    $scope.newMiembro();
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+            
+        }])
+        .controller('FechasConfigController',['$scope','$uibModalInstance', 'fecha', 'miembroFactory', function ($scope, $uibModalInstance, fecha,miembroFactory) {
+
+            $scope.fecha = fecha;
+            $scope.miembro = fecha;
+            $scope.selected = {
+                miembro: $scope.miembro
+            };
+
+            var _retrievePlayer = function(id){
+
+                miembroFactory.getOne({id:id}).$promise.then(
+                    function(responseOk){
+                        $scope.fecha.players.forEach(function(_players){
+                            if(_players.player1.id === responseOk.id){
+                                _players.player1.avatarImg = responseOk.avatarImg;
+                            }else if(_players.player2.id === responseOk.id){
+                                _players.player2.avatarImg = responseOk.avatarImg;
+                            }
+                        });
+                         
+                    },
+                    function(responseFailure){
+                        console.log(responseFailure);
+                    }
+                );
+            };
+
+            (function(){
+                var _ids = [];
+                $scope.fecha.players.forEach(function(_players){                    
+                    if(!_.contains(_ids,_players.player1.id)){
+                        _ids.push(_players.player1.id);    
+                    }
+                    if(!_.contains(_ids,_players.player2.id)){
+                        _ids.push(_players.player2.id);       
+                    }
+                    
+                });            
+                _ids.forEach(function(id){
+                    _retrievePlayer(id);
+                });
+            })();
+            
+
+            $scope.flowData = {};
+
+            $scope.ok = function () {
+                $scope.selected.miembro.avatarImg = angular.element( document.querySelector( '#userAvatar'))[0].src;
+                miembroFactory.create($scope.selected.miembro).$promise.then(
+                function(responseOk){
+                    console.log(responseOk);
+                    $scope.showError = false;
+                    $scope.selected.miembro.id = responseOk.id;
+                    $uibModalInstance.close($scope.selected.miembro);
+                },
+                function(responseError){
+                    if(responseError.status === -1 ){
+                        $scope.showError = false;
+                        $uibModalInstance.close($scope.selected.miembro);       
+                    }else{
+                        $scope.showError = true;
+                        $scope.errorMessage = responseError;
+                    }
+                });        
+            };
+
+            $scope.cancel = function () {
+                $uibModalInstance.dismiss('cancel');
+            };
+}])
 
 ;

@@ -34,7 +34,7 @@ angular.module('pingpongapp').
 
     var modalInstance = $uibModal.open({
       animation: $scope.animationsEnabled,
-      templateUrl: 'inscripcion.html',
+      templateUrl: 'views/inscripcion.html',
       controller: 'ModalInstanceCtrl',
       size: size,
       resolve: {

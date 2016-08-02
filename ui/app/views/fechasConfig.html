@@ -1,0 +1,37 @@
+
+<div class="modal-header">
+            <h3 class="modal-title">Fecha {{fecha.nro}}</h3>
+        </div>
+        <div class="modal-body">
+              <div class="form-horizontal" name="inscripcionForm">
+                <div ng-repeat="player in fecha.players">
+                    <h3>Partido {{$index+1}}</h3>
+                    <div style="display: inline-block; width: 100%;">
+                      <div class="col-sm-6 col-md-4" style="float: left; display:inline-block;">
+                        <div class="thumbnail">
+                          <img ng-src="{{player.player1.avatarImg}}" alt="img" style="width: 64px;     height: 64px;">                          
+                        </div>
+                        <div class="caption">
+                            <span class="label label-info ng-binding">{{player.player1.nombre}}</span>                            
+                          </div>
+                      </div>
+                      <div style="display: inline-block;padding-left: 75px;"><h3>VS</h3></div>
+
+                      <div class="col-sm-6 col-md-4" style="float: right; display:inline-block;">
+                        <div class="thumbnail">
+                          <img ng-src="{{player.player2.avatarImg}}" alt="img" style="width: 64px;    height: 64px;">                         
+                        </div>
+                         <div class="caption">
+                            <span class="label label-info ng-binding">{{player.player2.nombre}}</span>
+                          </div>
+                      </div>
+                    </div>
+                    <hr>
+                </div>
+                
+                <div class="modal-footer">                    
+                    <button class="btn btn-info" type="button" ng-click="cancel()">Cancel</button>
+                </div>
+
+              </div>
+        </div>

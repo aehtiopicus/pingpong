@@ -150,3 +150,18 @@ body {
     .error{
       background-color: red;
     }
+    .fixture{
+        display: inline-block;
+        width: 70%;
+        float: left;
+        margin-right: 23px;
+    }
+    .fixture-ul{
+      padding-left: 31px;
+    box-shadow: inherit;
+    padding-right: 33px;
+    }
+    .label-info{
+          width: 100%;
+    display: inline-block;
+    }

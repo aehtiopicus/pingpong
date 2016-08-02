@@ -12,8 +12,7 @@ angular.module('pingpongapp', ['ui.router','ngResource','ui.bootstrap','flow'])
                         templateUrl : 'views/header.html',
                     },
                     'content': {
-                        templateUrl : 'views/home.html',
-                        controller  : 'IndexController'
+                        templateUrl : 'views/home.html',                        
                     },
                     'footer': {
                         templateUrl : 'views/footer.html',
@@ -29,6 +28,17 @@ angular.module('pingpongapp', ['ui.router','ngResource','ui.bootstrap','flow'])
                     'content@': {
                         templateUrl : 'views/participantes.html',
                         controller  : 'ParticipantesController'                  
+                    }
+                }
+            })
+
+             // route for fixture
+            .state('app.fixture', {
+                url:'fixture',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/fixture.html',
+                        controller  : 'FixtureController'                  
                     }
                 }
             })
