@@ -161,7 +161,7 @@ body {
     box-shadow: inherit;
     padding-right: 33px;
     }
-    .label-info{
+    div.fechas .label-info{
           width: 100%;
     display: inline-block;
     }
