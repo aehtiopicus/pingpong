@@ -1,0 +1,60 @@
+
+<html>
+   <script src="scripts/angular.js"></script>
+   <script src="directiva2.js"></script>
+<body ng-app="cowAPP2">	
+	<div ng-controller="miController">
+		<div style="border:2px solid;">
+		<h3>Directiva scope false</h3>
+		<input type="text" ng-model="nombre">
+		<label>{{nombre}}</lable>
+		<div mi-directiva></div>
+		</div>
+
+		<div style="border:2px solid;">
+		<h3>Directiva scope true</h3>
+		<input type="text" ng-model="apellido">
+		<label>{{apellido}}</lable>
+		<div mi-directiva2></div>
+		</div>
+
+		<div style="border:2px solid;">
+		<h3>Directiva isolated scope </h3>
+		<input type="email" ng-model="email">
+		<label>{{email}}</lable>
+		<div mi-directiva3></div>
+		</div>
+		<div style="border:2px solid;">
+			<h3>Directiva isolated scope & @ = </h3>
+			<div mi-directiva4 people="persona" cb="bgColor" titulo="titulo">
+				<div>
+				<lable>nombre </label>
+				<input type="text" ng-model="persona.nombre">
+				</div>
+
+				<div>
+				<lable>apellido </label>
+				<input type="text" ng-model="persona.apellido">
+				</div>
+
+				<div>
+				<lable>email </label>
+				<input type="text" ng-model="persona.email">
+				</div>
+
+				<div>
+				<lable>titulo </label>
+				<input type="text" ng-model="titulo">
+				</div>
+				<input type="text" id="color" ng-model="color"/>
+			</div>
+		</div>
+	<div>
+
+		<div ng-hide="chauCuadrado" click-out="closeThis()"style="border: 1px solid;height: 200px;width: 200px;position: fixed;top: 75%;left: 50%;"></div>
+
+</body>
+
+
+</html>
+

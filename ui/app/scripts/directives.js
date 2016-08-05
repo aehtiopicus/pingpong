@@ -6,6 +6,21 @@
 /* Directives */
 
 angular.module('pingpongapp').
+	directive('loggedInf',function(){
+		return{
+			scope : true,
+			link : function(scope,elements,attr){				
+				console.log(scope+elements+attr);				
+				scope.$watch('loginRequired',function(a,b,c){
+					if(!a){
+						elements.attr('style','display:none !important;');
+					}else{
+						elements.attr('style','display:block !important;');
+					}
+				});
+			}
+		};
+	}).
 	directive('playerInfo', ['$parse','MatchInformationFactory',function($parse,MatchInformationFactory) {
 		return{
 			restrict : 'E',
